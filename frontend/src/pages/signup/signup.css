@@ -1,0 +1,147 @@
+* {
+    box-sizing: border-box;
+}
+
+.auth-page {
+    min-height: 100vh;
+    padding: 40px 20px;
+
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    font-family: Arial, sans-serif;
+    background-color: #f5f5f5;
+
+
+}
+
+.auth-container {
+    width: 100%;
+    max-width: 450px;
+    padding: 35px;
+
+
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+
+    background-color: #ffffff;
+    border: 1px solid #e0e0e0;
+    border-radius: 10px;
+
+
+}
+
+.auth-container h1 {
+    margin: 0 0 10px;
+    text-align: center;
+    font-size: 28px;
+    color: #222;
+}
+
+.input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+}
+
+.input-group label {
+    font-size: 14px;
+    font-weight: 600;
+    color: #444;
+}
+
+.input-group input,
+.input-group select {
+    width: 100%;
+    padding: 12px;
+
+
+    border: 1px solid #cccccc;
+    border-radius: 6px;
+
+    background-color: #ffffff;
+    font-size: 15px;
+
+
+}
+
+.input-group input:focus,
+.input-group select:focus {
+    outline: none;
+    border-color: #333333;
+}
+
+.terms {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+
+    font-size: 14px;
+    color: #555;
+    cursor: pointer;
+
+
+}
+
+.terms input {
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+}
+
+.auth-container button {
+    width: 100%;
+    padding: 12px;
+
+
+    border: none;
+    border-radius: 6px;
+
+    background-color: #222;
+    color: white;
+
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+
+
+}
+
+.auth-container button:hover {
+    background-color: #444;
+}
+
+.auth-link {
+    margin: 0;
+    text-align: center;
+    font-size: 14px;
+    color: #666;
+}
+
+.auth-link a {
+    color: #222;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.auth-link a:hover {
+    text-decoration: underline;
+}
+
+.error-message {
+    margin: 0;
+    padding: 10px;
+
+    border: 1px solid #d9534f;
+    border-radius: 6px;
+
+    background-color: #fff5f5;
+    color: #b52b27;
+
+    font-size: 14px;
+
+}

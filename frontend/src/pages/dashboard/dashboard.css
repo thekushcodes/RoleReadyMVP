@@ -1,0 +1,390 @@
+* {
+  box-sizing: border-box;
+}
+
+.dashboard-page {
+  min-height: 100vh;
+  display: flex;
+  font-family: Arial, sans-serif;
+  background-color: #f5f5f5;
+  color: #222;
+  position: relative;
+}
+
+/* Mobile Header Controls */
+.mobile-header {
+  display: none;
+}
+
+.close-sidebar-btn {
+  display: none;
+}
+
+.sidebar-overlay {
+  display: none;
+}
+
+/* Sidebar */
+.sidebar {
+  width: 240px;
+  min-height: 100vh;
+  padding: 25px 18px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background-color: #ffffff;
+  border-right: 1px solid #e0e0e0;
+  flex-shrink: 0;
+  transition: transform 0.3s ease-in-out;
+}
+
+.sidebar-brand {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.sidebar h2 {
+  margin: 0 0 45px;
+  padding: 0 10px;
+  font-size: 20px;
+}
+
+.sidebar-menu {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.menu-item {
+  width: 100%;
+  padding: 12px 10px;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  color: #555;
+  text-align: left;
+  font-size: 15px;
+  cursor: pointer;
+}
+
+.menu-item:hover {
+  background-color: #f5f5f5;
+  color: #222;
+}
+
+.menu-item.active {
+  background-color: #222;
+  color: #ffffff;
+}
+
+/* Profile */
+.profile-button {
+  width: 100%;
+  padding: 12px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  background-color: #ffffff;
+  text-align: left;
+  cursor: pointer;
+}
+
+.profile-button:hover {
+  background-color: #f8f8f8;
+}
+
+.profile-avatar {
+  width: 38px;
+  height: 38px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  background-color: #222;
+  color: #ffffff;
+  font-size: 15px;
+  font-weight: bold;
+}
+
+.profile-button strong {
+  display: block;
+  font-size: 14px;
+}
+
+.profile-button p {
+  margin: 3px 0 0;
+  font-size: 12px;
+  color: #777;
+}
+
+/* Main Content */
+.dashboard-main {
+  width: 100%;
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 60px;
+}
+
+.dashboard-header {
+  margin-bottom: 45px;
+}
+
+.dashboard-header p {
+  margin: 0;
+  color: #666;
+}
+
+.dashboard-header h1 {
+  margin: 5px 0;
+  font-size: 32px;
+}
+
+.dashboard-header span {
+  font-size: 14px;
+  color: #666;
+}
+
+/* Current Action */
+.section-label {
+  margin: 0 0 12px;
+  font-size: 12px;
+  font-weight: bold;
+  letter-spacing: 1px;
+  color: #777;
+}
+
+.action-card {
+  padding: 30px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 30px;
+  border: 1px solid #e0e0e0;
+  border-radius: 10px;
+  background-color: #ffffff;
+}
+
+.action-card h2 {
+  margin: 0 0 10px;
+  font-size: 22px;
+}
+
+.action-card p {
+  margin: 0;
+  color: #666;
+  line-height: 1.6;
+}
+
+.primary-button {
+  flex-shrink: 0;
+  padding: 12px 18px;
+  border: none;
+  border-radius: 6px;
+  background-color: #222;
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.primary-button:hover {
+  background-color: #444;
+}
+
+/* Skill Progress */
+.progress-section {
+  margin-top: 40px;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 18px;
+}
+
+.section-header h2 {
+  margin: 0;
+  font-size: 20px;
+}
+
+.section-header span {
+  font-size: 13px;
+  color: #777;
+}
+
+.progress-list {
+  padding: 25px;
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+  border: 1px solid #e0e0e0;
+  border-radius: 10px;
+  background-color: #ffffff;
+}
+
+.progress-info {
+  margin-bottom: 8px;
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+}
+
+.progress-info span:last-child {
+  color: #777;
+}
+
+.progress-bar {
+  width: 100%;
+  height: 7px;
+  overflow: hidden;
+  border-radius: 10px;
+  background-color: #eeeeee;
+}
+
+.progress-fill {
+  width: 0%;
+  height: 100%;
+  background-color: #222;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  .dashboard-page {
+    flex-direction: column;
+  }
+
+  .mobile-header {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 14px 20px;
+    background-color: #ffffff;
+    border-bottom: 1px solid #e0e0e0;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+
+  .menu-toggle-btn {
+    background: transparent;
+    border: none;
+    font-size: 22px;
+    cursor: pointer;
+    line-height: 1;
+    color: #222;
+  }
+
+  .mobile-title {
+    font-weight: bold;
+    font-size: 18px;
+  }
+
+  /* Drawer Behavior */
+  .sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    z-index: 100;
+    box-shadow: 2px 0 12px rgba(0, 0, 0, 0.15);
+    transform: translateX(-100%);
+  }
+
+  .sidebar.open {
+    transform: translateX(0);
+  }
+
+  .sidebar-brand {
+    margin-bottom: 30px;
+  }
+
+  .sidebar h2 {
+    margin: 0;
+    padding: 0;
+  }
+
+  .close-sidebar-btn {
+    display: block;
+    background: transparent;
+    border: none;
+    font-size: 18px;
+    cursor: pointer;
+    color: #555;
+    padding: 5px;
+  }
+
+  /* Backdrop */
+  .sidebar-overlay {
+    display: block;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.4);
+    z-index: 90;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+  }
+
+  .sidebar-overlay.active {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  /* Content Spacing Adjustments */
+  .dashboard-main {
+    padding: 25px 16px;
+  }
+
+  .action-card {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 18px;
+  }
+
+  .primary-button {
+    width: 100%;
+  }
+}
+
+.competency-section {
+    margin-top: 30px;
+}
+
+.competency-section h2 {
+    margin: 5px 0 20px;
+    color: #222;
+}
+
+.competency-grid {
+    display: grid;
+    grid-template-columns:
+        repeat(auto-fit, minmax(180px, 1fr));
+    gap: 15px;
+}
+
+.competency-card {
+    padding: 20px;
+
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+
+    background: #ffffff;
+
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.competency-card span {
+    font-size: 14px;
+    color: #666;
+}
+
+.competency-card strong {
+    font-size: 26px;
+    color: #222;
+}

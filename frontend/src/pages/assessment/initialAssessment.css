@@ -1,0 +1,324 @@
+* {
+    box-sizing: border-box;
+}
+
+.assessment-page {
+    min-height: 100vh;
+    padding: 40px 20px;
+
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    font-family: Arial, sans-serif;
+
+    background-color: #f5f5f5;
+    color: #222;
+
+
+}
+
+.assessment-container,
+.result-container {
+    width: 100%;
+    max-width: 750px;
+    padding: 35px;
+
+
+    border: 1px solid #e0e0e0;
+    border-radius: 10px;
+
+    background-color: #ffffff;
+
+
+}
+
+/* Header */
+
+.assessment-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+
+
+    gap: 20px;
+
+
+}
+
+.assessment-label {
+    margin: 0 0 8px;
+
+
+    font-size: 12px;
+    font-weight: bold;
+    letter-spacing: 1px;
+
+    color: #777;
+
+
+}
+
+.assessment-header h1,
+.result-container h1 {
+    margin: 0;
+
+
+    font-size: 28px;
+
+
+}
+
+.assessment-header>span {
+    padding: 8px 12px;
+
+
+    border: 1px solid #e0e0e0;
+    border-radius: 6px;
+
+    font-size: 14px;
+    color: #555;
+
+
+}
+
+/* Progress Bar */
+
+.question-progress {
+    width: 100%;
+    height: 6px;
+
+
+    margin: 30px 0;
+
+    overflow: hidden;
+    border-radius: 10px;
+
+    background-color: #eeeeee;
+
+
+}
+
+.question-progress-fill {
+    height: 100%;
+
+
+    background-color: #222;
+
+    transition: width 0.3s ease;
+
+
+}
+
+/* Question */
+
+.question-container h2 {
+    margin: 0 0 30px;
+
+
+    font-size: 22px;
+    line-height: 1.5;
+
+
+}
+
+.options-container {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.option {
+    width: 100%;
+    padding: 16px;
+
+
+    display: flex;
+    align-items: center;
+    gap: 15px;
+
+    border: 1px solid #dddddd;
+    border-radius: 8px;
+
+    background-color: #ffffff;
+    color: #333;
+
+    font-size: 15px;
+    text-align: left;
+
+    cursor: pointer;
+
+    transition: border-color 0.2s ease,
+        background-color 0.2s ease;
+
+
+}
+
+.option:hover {
+    border-color: #777;
+    background-color: #fafafa;
+}
+
+.option.selected {
+    border-color: #222;
+    background-color: #f5f5f5;
+}
+
+.option-letter {
+    width: 28px;
+    height: 28px;
+
+
+    flex-shrink: 0;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    border: 1px solid #cccccc;
+    border-radius: 50%;
+
+    font-size: 13px;
+    font-weight: bold;
+
+
+}
+
+.option.selected .option-letter {
+    border-color: #222;
+    background-color: #222;
+    color: #ffffff;
+}
+
+/* Footer */
+
+.assessment-footer {
+    margin-top: 35px;
+
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    gap: 20px;
+
+
+}
+
+.assessment-footer p {
+    margin: 0;
+
+
+    font-size: 14px;
+    color: #777;
+
+
+}
+
+/* Button */
+
+.assessment-button {
+    padding: 12px 20px;
+
+
+    border: none;
+    border-radius: 6px;
+
+    background-color: #222;
+    color: #ffffff;
+
+    font-size: 14px;
+    font-weight: 600;
+
+    cursor: pointer;
+
+
+}
+
+.assessment-button:hover {
+    background-color: #444;
+}
+
+.assessment-button:disabled {
+    background-color: #bbbbbb;
+    cursor: not-allowed;
+}
+
+/* Result Page */
+
+.result-container {
+    max-width: 500px;
+
+
+    text-align: center;
+
+
+}
+
+.result-container h1 {
+    margin-bottom: 30px;
+}
+
+.score-circle {
+    width: 150px;
+    height: 150px;
+
+
+    margin: 0 auto 25px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    border: 6px solid #222;
+    border-radius: 50%;
+
+
+}
+
+.score-circle span {
+    font-size: 32px;
+    font-weight: bold;
+}
+
+.result-text {
+    margin: 0 0 30px;
+
+
+    color: #666;
+    line-height: 1.6;
+
+
+}
+
+/* Responsive */
+
+@media (max-width: 600px) {
+    .assessment-page {
+        padding: 20px 15px;
+    }
+
+
+    .assessment-container,
+    .result-container {
+        padding: 25px 20px;
+    }
+
+    .assessment-header h1 {
+        font-size: 22px;
+    }
+
+    .question-container h2 {
+        font-size: 19px;
+    }
+
+    .assessment-footer {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .assessment-button {
+        width: 100%;
+    }
+}

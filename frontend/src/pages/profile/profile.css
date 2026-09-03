@@ -1,0 +1,172 @@
+.profile-page {
+min-height: 100vh;
+padding: 40px 20px;
+
+font-family: Arial, sans-serif;
+background-color: #f5f5f5;
+}
+
+.profile-container {
+width: 100%;
+max-width: 750px;
+margin: 0 auto;
+}
+
+.back-button {
+margin-bottom: 20px;
+padding: 0;
+
+border: none;
+background: transparent;
+
+color: #555;
+font-size: 14px;
+cursor: pointer;
+}
+
+.back-button:hover {
+color: #222;
+}
+
+.profile-card {
+padding: 35px;
+
+background-color: #ffffff;
+border: 1px solid #e0e0e0;
+border-radius: 10px;
+}
+
+.profile-main {
+display: flex;
+align-items: center;
+gap: 20px;
+}
+
+.profile-avatar-large {
+width: 70px;
+height: 70px;
+
+display: flex;
+justify-content: center;
+align-items: center;
+
+flex-shrink: 0;
+
+border-radius: 50%;
+
+background-color: #222;
+color: white;
+
+font-size: 28px;
+font-weight: 600;
+}
+
+.profile-label {
+margin: 0 0 6px;
+
+font-size: 12px;
+font-weight: 600;
+
+letter-spacing: 0.8px;
+
+color: #777;
+}
+
+.profile-main h1 {
+margin: 0 0 6px;
+
+font-size: 28px;
+color: #222;
+}
+
+.profile-role {
+font-size: 15px;
+color: #666;
+}
+
+.profile-divider {
+height: 1px;
+margin: 30px 0;
+
+background-color: #e5e5e5;
+}
+
+.profile-scores {
+display: grid;
+grid-template-columns: repeat(2, 1fr);
+gap: 15px;
+}
+
+.profile-score-card {
+padding: 20px;
+
+display: flex;
+flex-direction: column;
+gap: 8px;
+
+border: 1px solid #e0e0e0;
+border-radius: 8px;
+}
+
+.profile-score-card span {
+font-size: 14px;
+color: #666;
+}
+
+.profile-score-card strong {
+font-size: 28px;
+color: #222;
+}
+
+.profile-skills {
+margin-top: 30px;
+}
+
+.profile-skill-list {
+display: flex;
+flex-direction: column;
+gap: 12px;
+}
+
+.profile-skill {
+padding: 15px;
+
+display: flex;
+justify-content: space-between;
+align-items: center;
+
+border: 1px solid #e0e0e0;
+border-radius: 7px;
+
+color: #444;
+}
+
+.profile-skill strong {
+color: #222;
+}
+
+.profile-updated {
+margin: 25px 0 0;
+
+text-align: center;
+font-size: 13px;
+color: #888;
+}
+
+@media (max-width: 600px) {
+.profile-page {
+padding: 25px 15px;
+}
+
+.profile-card {
+padding: 25px 20px;
+}
+
+.profile-main {
+align-items: flex-start;
+}
+
+.profile-scores {
+grid-template-columns: 1fr;
+}
+}
