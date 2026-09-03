@@ -1,133 +1,127 @@
-import {
-  useEffect,
-  useState,
-} from "react";
-
-import {
-  useNavigate,
-} from "react-router-dom";
-
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { updateCompetency } from "../../utils/competency";
-
 import "./courseAssessment.css";
 
 function CourseAssessment() {
-  const navigate = useNavigate();
+const navigate = useNavigate();
 
-  const [questions, setQuestions] =
-    useState([]);
+ 
+const [questions, setQuestions] = useState([]);
+const [currentQuestion, setCurrentQuestion] = useState(0);
+const [selectedAnswer, setSelectedAnswer] = useState(null);
+const [score, setScore] = useState(0);
+const [answers, setAnswers] = useState([]);
 
-  const [
-    currentQuestion,
-    setCurrentQuestion,
-  ] = useState(0);
+const [loading, setLoading] = useState(true);
+const [error, setError] = useState("");
+const [showResult, setShowResult] = useState(false);
 
-  const [
-    selectedAnswer,
-    setSelectedAnswer,
-  ] = useState(null);
+useEffect(() => {
+    const startedCourses = JSON.parse(
+        localStorage.getItem("startedCourses")
+    ) || [];
 
-  const [score, setScore] =
-    useState(0);
-
-  const [answers, setAnswers] =
-    useState([]);
-
-  const [loading, setLoading] =
-    useState(true);
-
-  const [error, setError] =
-    useState("");
-
-  const [showResult, setShowResult] =
-    useState(false);
-
-  useEffect(() => {
-    const startedCourses =
-      JSON.parse(
-        localStorage.getItem(
-          "startedCourses"
-        )
-      ) || [];
-
-
-    const initialAssessment =
-      JSON.parse(
-        localStorage.getItem(
-          "assessmentData"
-        )
-      );
+    const initialAssessment = JSON.parse(
+        localStorage.getItem("assessmentData")
+    );
 
     if (startedCourses.length === 0) {
-      navigate("/recommendations");
-      return;
+        navigate("/recommendations");
+        return;
     }
 
-    const generateAssessment =
-      async () => {
+    const generateAssessment = async () => {
         try {
-          const response =
-            fetch(
-              "https://rolereadymvp.onrender.com/api/generate-assessment",
-              {
-                method: "POST",
-
-                headers: {
-                  "Content-Type":
-                    "application/json",
-                },
-
-                body: JSON.stringify({
-                  courses:
-                    startedCourses,
-
-                  previousQuestions:
-                    initialAssessment?.askedQuestions ||
-                    [],
-                }),
-              }
+            console.log(
+                "Sending assessment request:",
+                startedCourses
             );
 
-          if (!response.ok) {
-            throw new Error(
-              "Could not generate assessment"
+            const apiResponse = await fetch(
+                "https://rolereadymvp.onrender.com/api/generate-assessment",
+                {
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+
+                    body: JSON.stringify({
+                        courses: startedCourses,
+
+                        previousQuestions:
+                            initialAssessment?.askedQuestions || [],
+                    }),
+                }
             );
-          }
 
-          const data =
-            await response.json();
+            if (!apiResponse.ok) {
+                const errorText =
+                    await apiResponse.text();
 
-          setQuestions(
-            data.questions
-          );
-        } catch {
-          setError(
-            "Unable to generate your assessment. Please try again."
-          );
+                console.error(
+                    "Backend error:",
+                    apiResponse.status,
+                    errorText
+                );
+
+                throw new Error(
+                    `Backend error ${apiResponse.status}: ${errorText}`
+                );
+            }
+
+            const data =
+                await apiResponse.json();
+
+            console.log(
+                "Assessment generated:",
+                data
+            );
+
+            if (
+                !data.questions ||
+                data.questions.length === 0
+            ) {
+                throw new Error(
+                    "No questions were generated"
+                );
+            }
+
+            setQuestions(data.questions);
+
+        } catch (error) {
+            console.error(
+                "Assessment request failed:",
+                error
+            );
+
+            setError(
+                error.message ||
+                "Unable to generate your assessment. Please try again."
+            );
+
         } finally {
-          setLoading(false);
+            setLoading(false);
         }
-      };
+    };
 
     generateAssessment();
 
+}, [navigate]);
 
-  }, [navigate]);
 
-  const handleNext = () => {
-    if (
-      selectedAnswer === null
-    ) {
-      return;
+const handleNext = () => {
+    if (selectedAnswer === null) {
+        return;
     }
 
-
     const currentQuestionData =
-      questions[currentQuestion];
+        questions[currentQuestion];
 
     const updatedAnswers = [
-      ...answers,
-      selectedAnswer,
+        ...answers,
+        selectedAnswer,
     ];
 
     setAnswers(updatedAnswers);
@@ -135,263 +129,259 @@ function CourseAssessment() {
     let updatedScore = score;
 
     if (
-      selectedAnswer ===
-      currentQuestionData.correctAnswer
+        selectedAnswer ===
+        currentQuestionData.correctAnswer
     ) {
-      updatedScore = score + 1;
+        updatedScore = score + 1;
     }
 
     setScore(updatedScore);
 
     if (
-      currentQuestion ===
-      questions.length - 1
+        currentQuestion ===
+        questions.length - 1
     ) {
-      const percentage =
-        Math.round(
-          (updatedScore /
-            questions.length) *
-          100
+        const percentage = Math.round(
+            (updatedScore / questions.length) * 100
         );
 
-      const updatedProfile =
-        updateCompetency(
-          questions,
-          updatedAnswers
+        const updatedProfile =
+            updateCompetency(
+                questions,
+                updatedAnswers
+            );
+
+        localStorage.setItem(
+            "verificationAssessment",
+            JSON.stringify({
+                score: updatedScore,
+                totalQuestions: questions.length,
+                percentage,
+                passed: percentage >= 60,
+                competencyProfile: updatedProfile,
+                completed: true,
+            })
         );
 
-      localStorage.setItem(
-        "verificationAssessment",
-        JSON.stringify({
-          score:
-            updatedScore,
+        setShowResult(true);
 
-          totalQuestions:
-            questions.length,
-
-          percentage:
-            percentage,
-
-          passed:
-            percentage >= 60,
-
-          competencyProfile:
-            updatedProfile,
-
-          completed: true,
-        })
-      );
-
-      setShowResult(true);
     } else {
-      setCurrentQuestion(
-        currentQuestion + 1
-      );
+        setCurrentQuestion(
+            currentQuestion + 1
+        );
 
-      setSelectedAnswer(null);
+        setSelectedAnswer(null);
     }
+};
 
 
-  };
+if (loading) {
+    return (
+        <div className="course-assessment-page">
+            <div className="assessment-loading">
+                <p className="assessment-label">
+                    PREPARING ASSESSMENT
+                </p>
 
-  if (loading) {
-    return (<div className="course-assessment-page"> <div className="assessment-loading"> <p className="assessment-label">
-      PREPARING ASSESSMENT </p>
+                <h1>
+                    Generating your questions...
+                </h1>
+
+                <p>
+                    Our AI is preparing questions
+                    based on your learning path.
+                </p>
+            </div>
+        </div>
+    );
+}
 
 
-      <h1>
-        Generating your questions...
-      </h1>
+if (error) {
+    return (
+        <div className="course-assessment-page">
+            <div className="assessment-loading">
+                <h1>
+                    Something went wrong
+                </h1>
 
-      <p>
-        Our AI is preparing questions
-        based on your learning path.
-      </p>
-    </div>
-    </div>
+                <p>
+                    {error}
+                </p>
+
+                <button
+                    className="assessment-button"
+                    onClick={() =>
+                        navigate("/recommendations")
+                    }
+                >
+                    Back to Recommendations
+                </button>
+            </div>
+        </div>
+    );
+}
+
+
+if (showResult) {
+    const percentage = Math.round(
+        (score / questions.length) * 100
     );
 
-
-  }
-
-  if (error) {
-    return (<div className="course-assessment-page"> <div className="assessment-loading"> <h1>
-      Something went wrong </h1>
-
-
-      <p>
-        {error}
-      </p>
-
-      <button
-        className="assessment-button"
-        onClick={() =>
-          navigate("/recommendations")
-        }
-      >
-        Back to Recommendations
-      </button>
-    </div>
-    </div>
-    );
-
-
-  }
-
-  if (showResult) {
-    const percentage =
-      Math.round(
-        (score /
-          questions.length) *
-        100
-      );
-
-
-    const passed =
-      percentage >= 60;
+    const passed = percentage >= 60;
 
     return (
-      <div className="course-assessment-page">
-        <div className="result-container">
-          <p className="assessment-label">
-            VERIFICATION COMPLETE
-          </p>
+        <div className="course-assessment-page">
+            <div className="result-container">
+                <p className="assessment-label">
+                    VERIFICATION COMPLETE
+                </p>
 
-          <h1>
-            {passed
-              ? "Learning Verified"
-              : "More Learning Needed"}
-          </h1>
+                <h1>
+                    {passed
+                        ? "Learning Verified"
+                        : "More Learning Needed"}
+                </h1>
 
-          <div className="score-circle">
-            <span>
-              {percentage}%
-            </span>
-          </div>
+                <div className="score-circle">
+                    <span>
+                        {percentage}%
+                    </span>
+                </div>
 
-          <p className="result-text">
-            You answered {score} out of{" "}
-            {questions.length} questions
-            correctly.
-          </p>
+                <p className="result-text">
+                    You answered {score} out of{" "}
+                    {questions.length} questions
+                    correctly.
+                </p>
 
-          <p className="result-text">
-            {passed
-              ? "Your competency profile has been updated based on your latest assessment."
-              : "Your competency profile has been updated. Review the recommended learning resources and continue improving."}
-          </p>
+                <p className="result-text">
+                    {passed
+                        ? "Your competency profile has been updated based on your latest assessment."
+                        : "Your competency profile has been updated. Review the recommended learning resources and continue improving."}
+                </p>
 
-          <button
-            className="assessment-button"
-            onClick={() =>
-              navigate("/dashboard")
-            }
-          >
-            Continue to Dashboard
-          </button>
+                <button
+                    className="assessment-button"
+                    onClick={() =>
+                        navigate("/dashboard")
+                    }
+                >
+                    Continue to Dashboard
+                </button>
+            </div>
         </div>
-      </div>
     );
+}
 
 
-  }
-
-  const question =
+const question =
     questions[currentQuestion];
 
-  if (!question) {
-    return (<div className="course-assessment-page"> <div className="assessment-loading"> <h1>
-      No questions available </h1> </div> </div>
+if (!question) {
+    return (
+        <div className="course-assessment-page">
+            <div className="assessment-loading">
+                <h1>
+                    No questions available
+                </h1>
+            </div>
+        </div>
     );
-  }
-
-  return (<div className="course-assessment-page"> <div className="assessment-container"> <div className="assessment-header"> <div> <p className="assessment-label">
-    LEARNING VERIFICATION </p>
+}
 
 
-    <h1>
-      Course Assessment
-    </h1>
-  </div>
+return (
+    <div className="course-assessment-page">
+        <div className="assessment-container">
+            <div className="assessment-header">
+                <div>
+                    <p className="assessment-label">
+                        LEARNING VERIFICATION
+                    </p>
 
-    <span>
-      {currentQuestion + 1}
-      {" / "}
-      {questions.length}
-    </span>
-  </div>
+                    <h1>
+                        Course Assessment
+                    </h1>
+                </div>
 
-    <div className="question-progress">
-      <div
-        className="question-progress-fill"
-        style={{
-          width: `${((currentQuestion + 1) /
-              questions.length) *
-            100
-            }%`,
-        }}
-      />
+                <span>
+                    {currentQuestion + 1}
+                    {" / "}
+                    {questions.length}
+                </span>
+            </div>
+
+            <div className="question-progress">
+                <div
+                    className="question-progress-fill"
+                    style={{
+                        width: `${
+                            ((currentQuestion + 1) /
+                                questions.length) *
+                            100
+                        }%`,
+                    }}
+                />
+            </div>
+
+            <div className="question-container">
+                <h2>
+                    {question.question}
+                </h2>
+
+                <div className="options-container">
+                    {question.options.map(
+                        (option, index) => (
+                            <button
+                                key={index}
+                                className={`option ${
+                                    selectedAnswer === index
+                                        ? "selected"
+                                        : ""
+                                }`}
+                                onClick={() =>
+                                    setSelectedAnswer(index)
+                                }
+                            >
+                                <span className="option-letter">
+                                    {String.fromCharCode(
+                                        65 + index
+                                    )}
+                                </span>
+
+                                {option}
+                            </button>
+                        )
+                    )}
+                </div>
+            </div>
+
+            <div className="assessment-footer">
+                <p>
+                    {selectedAnswer === null
+                        ? "Select an answer to continue"
+                        : "Answer selected"}
+                </p>
+
+                <button
+                    className="assessment-button"
+                    onClick={handleNext}
+                    disabled={
+                        selectedAnswer === null
+                    }
+                >
+                    {currentQuestion ===
+                    questions.length - 1
+                        ? "Finish Assessment"
+                        : "Next Question"}
+                </button>
+            </div>
+        </div>
     </div>
+);
+ 
 
-    <div className="question-container">
-      <h2>
-        {question.question}
-      </h2>
-
-      <div className="options-container">
-        {question.options.map(
-          (option, index) => (
-            <button
-              key={index}
-              className={`option ${selectedAnswer ===
-                  index
-                  ? "selected"
-                  : ""
-                }`}
-              onClick={() =>
-                setSelectedAnswer(
-                  index
-                )
-              }
-            >
-              <span className="option-letter">
-                {String.fromCharCode(
-                  65 + index
-                )}
-              </span>
-
-              {option}
-            </button>
-          )
-        )}
-      </div>
-    </div>
-
-    <div className="assessment-footer">
-      <p>
-        {selectedAnswer === null
-          ? "Select an answer to continue"
-          : "Answer selected"}
-      </p>
-
-      <button
-        className="assessment-button"
-        onClick={handleNext}
-        disabled={
-          selectedAnswer === null
-        }
-      >
-        {currentQuestion ===
-          questions.length - 1
-          ? "Finish Assessment"
-          : "Next Question"}
-      </button>
-    </div>
-  </div>
-  </div>
-
-
-  );
 }
 
 export default CourseAssessment;
