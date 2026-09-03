@@ -129,12 +129,32 @@ STRICT RULES:
   `;
 
 
-            const response =
-                await ai.models.generateContent({
-                    model:
-                        "gemini-3.5-flash-lite",
-                    contents: prompt
-                });
+            let response;
+const maxRetries = 3;
+
+for (let attempt = 1; attempt <= maxRetries; attempt++) {
+    try {
+        response = await ai.models.generateContent({
+            model: "gemini-3.5-flash-lite",
+            contents: prompt
+        });
+
+        break;
+    } catch (error) {
+        console.log(
+            `AI attempt ${attempt} failed:`,
+            error.message
+        );
+
+        if (attempt === maxRetries) {
+            throw error;
+        }
+
+        await new Promise(
+            (resolve) => setTimeout(resolve, attempt * 2000)
+        );
+    }
+}
 
 
             const responseText = response.text;
